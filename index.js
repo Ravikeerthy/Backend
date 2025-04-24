@@ -17,6 +17,7 @@ app.use(express.json());
 
 app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
+  console.log("Received:", { name, email, message });
 
   if (!name || !email || !message) {
     return res.status(400).json({ message: "All fields are required" });
@@ -42,7 +43,8 @@ app.post("/contact", async (req, res) => {
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    const result = await transporter.sendMail(mailOptions);
+    console.log("Email sent:", result);
     res.status(200).json({ message: "Message sent successfully" });
   } catch (error) {
     console.error("Email sending error:", error);

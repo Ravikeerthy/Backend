@@ -7,11 +7,14 @@ dotenv.config();
 const app = express();
 const PORT = 5000;
 
-app.use(cors());
+app.use(cors({
+  origin: "https://keerthy-portfolio-work.netlify.app",
+  credentials: true
+}));
 app.use(express.json());
 
 app.post('/contact', async(req, res) =>{
-    const {name, email, message, receiver} = req.body;
+    const {name, email, message} = req.body;
 
     if(!name || !email || !message){
        return res.status(400).json({message:"All fields are required"})
@@ -25,7 +28,7 @@ app.post('/contact', async(req, res) =>{
       });
     
       const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: email,
         to: process.env.EMAIL_RECEIVER,
         subject: `Message from ${name}`,
         html: `
